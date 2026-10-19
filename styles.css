@@ -141,13 +141,33 @@ h1, h2, h3, p, figure { margin-top: 0; }
 .search-box input { width: 100%; min-width: 0; padding: 0; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 12px; }
 .search-box input::placeholder { color: #687269; }
 .collection-count { margin: 8px 0 0; color: #626b63; font-size: 10px; text-align: right; }
+.collection-results { display: grid; gap: 58px; }
+.collection-group[hidden] { display: none; }
+.collection-group__heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 20px; }
+.collection-group__heading .eyebrow { margin-bottom: 9px; }
+.collection-group__heading h3 { margin: 0; font-size: clamp(25px, 3vw, 34px); font-weight: 500; letter-spacing: -.055em; line-height: 1.1; }
+.collection-group__heading > p { max-width: 370px; margin: 0 0 2px; color: #626b63; font-size: 12px; line-height: 1.7; }
+.collection-group__heading--names { align-items: center; margin-bottom: 17px; }
+.product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; }
+.product-card { min-width: 0; overflow: hidden; border: 1px solid #e0e1db; background: var(--white); transition: border-color .24s ease, transform .24s ease; }
+.product-card:hover { transform: translateY(-3px); border-color: #c9c8bb; }
+.product-card__media { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: #e9e7e0; }
+.product-card__media img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+.product-card:hover .product-card__media img { transform: scale(1.025); }
+.product-card__volume { position: absolute; top: 12px; left: 12px; padding: 6px 9px; color: #26362d; background: rgb(250 249 245 / 92%); font-size: 9px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; }
+.product-card__body { min-height: 125px; display: flex; flex-direction: column; align-items: stretch; justify-content: space-between; gap: 12px; padding: 15px 15px 12px; }
+.product-card__label { margin: 0 0 4px; color: #687269; font-size: 9px; letter-spacing: .09em; text-transform: uppercase; }
+.product-card h4 { margin: 0; font-size: 17px; font-weight: 520; letter-spacing: -.035em; line-height: 1.25; }
+.product-card__cta { min-height: 44px; display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0 6px; border: 0; border-bottom: 1px solid #c9cdc4; color: #435148; background: transparent; font-size: 11px; text-align: left; cursor: pointer; transition: color .2s ease, border-color .2s ease; }
+.product-card__cta span { color: #8a7755; font-size: 14px; }
+.product-card__cta:hover { border-color: var(--green); color: var(--green); }
 .fragrance-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; overflow: hidden; border: 1px solid #e0e1db; background: #e0e1db; }
 .fragrance-card { min-height: 166px; display: flex; flex-direction: column; justify-content: space-between; padding: 17px 15px 14px; background: var(--white); transition: background .2s ease, transform .2s ease; }
 .fragrance-card:hover { transform: translateY(-2px); background: #f0f1eb; }
 .fragrance-card[hidden] { display: none; }
 .fragrance-card__top { display: flex; align-items: center; justify-content: space-between; color: #667067; font-size: 9px; letter-spacing: .1em; }
 .fragrance-card__drop { width: 17px; height: 21px; display: block; transform: rotate(45deg); border: 1px solid #a7ac9f; border-radius: 100% 0 100% 100%; opacity: .8; }
-.fragrance-card h3 { margin: 27px 0 8px; font-size: 15px; font-weight: 520; letter-spacing: -.035em; line-height: 1.25; }
+.fragrance-card h4 { margin: 27px 0 8px; font-size: 15px; font-weight: 520; letter-spacing: -.035em; line-height: 1.25; }
 .fragrance-card button { min-height: 44px; display: inline-flex; align-items: center; width: max-content; padding: 8px 0; border: 0; border-bottom: 1px solid #c9cdc4; color: #526257; background: transparent; font-size: 10px; text-align: left; cursor: pointer; }
 .fragrance-card button:hover { border-color: var(--green); color: var(--green); }
 .empty-state { margin: 25px 0 0; color: #626b63; font-size: 13px; }
@@ -230,6 +250,7 @@ h1, h2, h3, p, figure { margin-top: 0; }
   .hero-art { min-height: 430px; }
   .navigation { gap: 22px; }
   .fragrance-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .promise__copy { padding-inline: 55px; }
 }
 
@@ -288,9 +309,16 @@ h1, h2, h3, p, figure { margin-top: 0; }
   .section-heading--collection { align-items: flex-start; flex-direction: column; gap: 22px; }
   .collection-tools { width: 100%; margin: 0; }
   .collection-count { text-align: left; }
+  .collection-results { gap: 43px; }
+  .collection-group__heading { align-items: flex-start; flex-direction: column; gap: 9px; }
+  .collection-group__heading > p { max-width: 440px; font-size: 11px; }
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .product-card__body { min-height: 119px; gap: 9px; padding: 12px 11px 10px; }
+  .product-card h4 { font-size: 14px; }
+  .product-card__cta { font-size: 10px; }
   .fragrance-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fragrance-card { min-height: 150px; padding: 14px 13px 12px; }
-  .fragrance-card h3 { font-size: 14px; }
+  .fragrance-card h4 { font-size: 14px; }
   .collection-bottom { align-items: flex-start; gap: 15px; margin-top: 24px; font-size: 11px; }
   .fine-print { margin-top: 15px; }
   .promise-section { grid-template-columns: 1fr; }

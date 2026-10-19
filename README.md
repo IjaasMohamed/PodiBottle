@@ -33,6 +33,8 @@ The domain is intentionally a clear placeholder because no production domain was
 ## Supplied assets
 
 - `assets/roll-on-hero.webp` — optimized feature image from the supplied `02.png`.
+- `assets/fs-ombre-leather-50ml.webp`, `assets/fs-savage-noir-50ml.webp`, `assets/fs-imperial-oud-50ml.webp`, and `assets/fs-tux-noir-50ml.webp` — optimized 50 ml bottle photos, named from the supplied bottle labels and used in the 50 ml collection.
+- The four other new WhatsApp photos show branded reference bottles. They remain in `assets/` as supplied; they are not presented as Podi Bottle stock photos.
 - `assets/og-podi-bottle.jpg` — branded 1200 × 630 social-sharing image composed from the supplied bottle photograph.
 - `assets/Jadoor.jpeg` — supplied roll-on product photo used in the editorial section and video poster.
 - `assets/Attar.mp4` — supplied product video, loaded only when requested by the visitor.

@@ -11,18 +11,26 @@ const quantityInput = document.querySelector("#order-quantity");
 const formStatus = document.querySelector("#form-status");
 
 function filterFragrances(query = "") {
-  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const normalizedQuery = normalizeSearch(query);
   let visibleCount = 0;
 
   grid.querySelectorAll("[data-fragrance]").forEach((card) => {
-    const matches = card.dataset.fragrance.toLocaleLowerCase().includes(normalizedQuery);
+    const matches = normalizeSearch(card.dataset.fragrance).includes(normalizedQuery);
     card.hidden = !matches;
     if (matches) visibleCount += 1;
   });
 
+  grid.querySelectorAll("[data-collection-group]").forEach((group) => {
+    group.hidden = !group.querySelector('[data-fragrance]:not([hidden])');
+  });
+
   resultCount.textContent = String(visibleCount);
-  resultLabel.textContent = visibleCount === 1 ? "fragrance to explore" : "fragrances to explore";
+  resultLabel.textContent = visibleCount === 1 ? "fragrance option" : "fragrance options";
   emptyState.hidden = visibleCount !== 0;
+}
+
+function normalizeSearch(value) {
+  return value.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
 }
 
 searchInput.addEventListener("input", (event) => filterFragrances(event.currentTarget.value));
@@ -39,7 +47,7 @@ function goToOrder({ scent, format, focusTarget } = {}) {
 grid.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-scent]");
   if (!button) return;
-  goToOrder({ scent: button.dataset.scent, focusTarget: "format" });
+  goToOrder({ scent: button.dataset.scent, format: button.dataset.productFormat, focusTarget: "format" });
 });
 
 document.querySelectorAll("[data-format]").forEach((button) => {

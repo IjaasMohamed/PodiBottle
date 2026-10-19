@@ -220,73 +220,147 @@
             <div class="collection-tools">
               <label class="search-box" for="scent-search">
                 <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.5"></circle><path d="m13 13 4 4"></path></svg>
-                <input id="scent-search" type="search" placeholder="Search fragrances" autocomplete="off" />
+                <input id="scent-search" type="search" placeholder="Search bottles and fragrances" autocomplete="off" />
               </label>
-              <p class="collection-count" aria-live="polite"><span id="result-count">15</span> <span id="result-label">fragrances to explore</span></p>
+              <p class="collection-count" aria-live="polite"><span id="result-count">22</span> <span id="result-label">fragrance options</span></p>
             </div>
           </div>
 
-          <div class="fragrance-grid" id="fragrance-grid">
+          <div class="collection-results" id="fragrance-grid">
+            <section class="collection-group collection-group--bottles" data-collection-group aria-labelledby="bottle-collection-title">
+              <div class="collection-group__heading">
+                <div>
+                  <p class="eyebrow">The bottle collection</p>
+                  <h3 id="bottle-collection-title">50 ml selections</h3>
+                </div>
+                <p>Names follow the labels on the supplied bottles. Ask us to confirm current availability and price.</p>
+              </div>
+              <div class="product-grid">
+                <article class="product-card" data-fragrance="FS Ombré Leather" data-reveal>
+                  <div class="product-card__media">
+                    <img src="/assets/fs-ombre-leather-50ml.webp" alt="A clear 50 ml perfume bottle held in a hand and labeled FS ombré leather" width="960" height="1280" loading="lazy" decoding="async" />
+                    <span class="product-card__volume">50 ml</span>
+                  </div>
+                  <div class="product-card__body">
+                    <div><p class="product-card__label">Perfume bottle</p><h4>FS Ombré Leather</h4></div>
+                    <button class="product-card__cta" type="button" data-scent="FS Ombré Leather" data-product-format="50ml bottle" aria-label="Enquire about FS Ombré Leather in 50 ml">Enquire <span aria-hidden="true">↗</span></button>
+                  </div>
+                </article>
+                <article class="product-card" data-fragrance="FS Savage Noir" data-reveal>
+                  <div class="product-card__media">
+                    <img src="/assets/fs-savage-noir-50ml.webp" alt="A clear 50 ml perfume bottle held in a hand and labeled FS Savage Noir" width="960" height="1280" loading="lazy" decoding="async" />
+                    <span class="product-card__volume">50 ml</span>
+                  </div>
+                  <div class="product-card__body">
+                    <div><p class="product-card__label">Perfume bottle</p><h4>FS Savage Noir</h4></div>
+                    <button class="product-card__cta" type="button" data-scent="FS Savage Noir" data-product-format="50ml bottle" aria-label="Enquire about FS Savage Noir in 50 ml">Enquire <span aria-hidden="true">↗</span></button>
+                  </div>
+                </article>
+                <article class="product-card" data-fragrance="FS Imperial Oud" data-reveal>
+                  <div class="product-card__media">
+                    <img src="/assets/fs-imperial-oud-50ml.webp" alt="An amber 50 ml perfume bottle held in a hand and labeled FS Imperial Oud" width="960" height="1280" loading="lazy" decoding="async" />
+                    <span class="product-card__volume">50 ml</span>
+                  </div>
+                  <div class="product-card__body">
+                    <div><p class="product-card__label">Perfume bottle</p><h4>FS Imperial Oud</h4></div>
+                    <button class="product-card__cta" type="button" data-scent="FS Imperial Oud" data-product-format="50ml bottle" aria-label="Enquire about FS Imperial Oud in 50 ml">Enquire <span aria-hidden="true">↗</span></button>
+                  </div>
+                </article>
+                <article class="product-card" data-fragrance="FS Tux Noir" data-reveal>
+                  <div class="product-card__media">
+                    <img src="/assets/fs-tux-noir-50ml.webp" alt="A clear 50 ml perfume bottle with a gold cap, held in a hand and labeled FS Tux Noir" width="960" height="1280" loading="lazy" decoding="async" />
+                    <span class="product-card__volume">50 ml</span>
+                  </div>
+                  <div class="product-card__body">
+                    <div><p class="product-card__label">Perfume bottle</p><h4>FS Tux Noir</h4></div>
+                    <button class="product-card__cta" type="button" data-scent="FS Tux Noir" data-product-format="50ml bottle" aria-label="Enquire about FS Tux Noir in 50 ml">Enquire <span aria-hidden="true">↗</span></button>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="collection-group" data-collection-group aria-labelledby="fragrance-names-title">
+              <div class="collection-group__heading collection-group__heading--names">
+                <div>
+                  <p class="eyebrow">More to discover</p>
+                  <h3 id="fragrance-names-title">Fragrance names to ask about</h3>
+                </div>
+              </div>
+              <div class="fragrance-grid">
             <article class="fragrance-card" data-fragrance="Azzaro Most Wanted" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 01</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Azzaro Most Wanted</h3><button type="button" data-scent="Azzaro Most Wanted" aria-label="Ask about Azzaro Most Wanted">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Azzaro Most Wanted</h4><button type="button" data-scent="Azzaro Most Wanted" aria-label="Ask about Azzaro Most Wanted">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Creed Aventus" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 02</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Creed Aventus</h3><button type="button" data-scent="Creed Aventus" aria-label="Ask about Creed Aventus">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Creed Aventus</h4><button type="button" data-scent="Creed Aventus" aria-label="Ask about Creed Aventus">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Sabhaya" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 03</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Sabhaya</h3><button type="button" data-scent="Sabhaya" aria-label="Ask about Sabhaya">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Sabhaya</h4><button type="button" data-scent="Sabhaya" aria-label="Ask about Sabhaya">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Dior Sauvage" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 04</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Dior Sauvage</h3><button type="button" data-scent="Dior Sauvage" aria-label="Ask about Dior Sauvage">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Dior Sauvage</h4><button type="button" data-scent="Dior Sauvage" aria-label="Ask about Dior Sauvage">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Oudh" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 05</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Oudh</h3><button type="button" data-scent="Oudh" aria-label="Ask about Oudh">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Oudh</h4><button type="button" data-scent="Oudh" aria-label="Ask about Oudh">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="9PM" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 06</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>9PM</h3><button type="button" data-scent="9PM" aria-label="Ask about 9PM">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>9PM</h4><button type="button" data-scent="9PM" aria-label="Ask about 9PM">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="1 Billion" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 07</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>1 Billion</h3><button type="button" data-scent="1 Billion" aria-label="Ask about 1 Billion">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>1 Billion</h4><button type="button" data-scent="1 Billion" aria-label="Ask about 1 Billion">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Lattafa" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 08</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Lattafa</h3><button type="button" data-scent="Lattafa" aria-label="Ask about Lattafa">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Lattafa</h4><button type="button" data-scent="Lattafa" aria-label="Ask about Lattafa">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Calvin Klein" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 09</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Calvin Klein</h3><button type="button" data-scent="Calvin Klein" aria-label="Ask about Calvin Klein">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Calvin Klein</h4><button type="button" data-scent="Calvin Klein" aria-label="Ask about Calvin Klein">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Armani" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 10</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Armani</h3><button type="button" data-scent="Armani" aria-label="Ask about Armani">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Armani</h4><button type="button" data-scent="Armani" aria-label="Ask about Armani">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Armani Di Aqua" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 11</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Armani Di Aqua</h3><button type="button" data-scent="Armani Di Aqua" aria-label="Ask about Armani Di Aqua">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Armani Di Aqua</h4><button type="button" data-scent="Armani Di Aqua" aria-label="Ask about Armani Di Aqua">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Hawas Ice" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 12</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Hawas Ice</h3><button type="button" data-scent="Hawas Ice" aria-label="Ask about Hawas Ice">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Hawas Ice</h4><button type="button" data-scent="Hawas Ice" aria-label="Ask about Hawas Ice">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="J'adore" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 13</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>J'adore</h3><button type="button" data-scent="J'adore" aria-label="Ask about J'adore">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>J'adore</h4><button type="button" data-scent="J'adore" aria-label="Ask about J'adore">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="Lacoste" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 14</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>Lacoste</h3><button type="button" data-scent="Lacoste" aria-label="Ask about Lacoste">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>Lacoste</h4><button type="button" data-scent="Lacoste" aria-label="Ask about Lacoste">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
             <article class="fragrance-card" data-fragrance="CR7" data-reveal>
               <div class="fragrance-card__top"><span>SCENT 15</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
-              <div><h3>CR7</h3><button type="button" data-scent="CR7" aria-label="Ask about CR7">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+              <div><h4>CR7</h4><button type="button" data-scent="CR7" aria-label="Ask about CR7">Ask about this scent <span aria-hidden="true">↗</span></button></div>
             </article>
+            <article class="fragrance-card" data-fragrance="Tom Ford Ombré Leather" data-reveal>
+              <div class="fragrance-card__top"><span>SCENT 16</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
+              <div><h4>Tom Ford Ombré Leather</h4><button type="button" data-scent="Tom Ford Ombré Leather" aria-label="Ask about Tom Ford Ombré Leather">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+            </article>
+            <article class="fragrance-card" data-fragrance="Haramain Portfolio Imperial Oud" data-reveal>
+              <div class="fragrance-card__top"><span>SCENT 17</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
+              <div><h4>Haramain Portfolio Imperial Oud</h4><button type="button" data-scent="Haramain Portfolio Imperial Oud" aria-label="Ask about Haramain Portfolio Imperial Oud">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+            </article>
+            <article class="fragrance-card" data-fragrance="YSL Tuxedo" data-reveal>
+              <div class="fragrance-card__top"><span>SCENT 18</span><span class="fragrance-card__drop" aria-hidden="true"></span></div>
+              <div><h4>YSL Tuxedo</h4><button type="button" data-scent="YSL Tuxedo" aria-label="Ask about YSL Tuxedo">Ask about this scent <span aria-hidden="true">↗</span></button></div>
+            </article>
+              </div>
+            </section>
           </div>
           <p class="empty-state" id="empty-state" role="status" aria-live="polite" hidden>No match yet. Try another name, or <a href="#order">tell us what you’re looking for</a>.</p>
 
@@ -294,7 +368,7 @@
             <span>Looking for something else?</span>
             <a class="text-link" href="#order">Ask us about it <span aria-hidden="true">↗</span></a>
           </div>
-          <p class="fine-print">These are examples from the fragrance range. Ask us about current availability and pricing.</p>
+          <p class="fine-print">Bottle names follow the supplied product labels. Other scent names are examples from the fragrance range; ask us to confirm current availability and pricing.</p>
         </div>
       </section>
 
@@ -329,7 +403,7 @@
             <label class="field-label" for="order-scent">Fragrance (optional)</label>
             <input id="order-scent" name="scent" type="text" placeholder="e.g. Creed Aventus" list="scent-options" autocomplete="off" />
             <datalist id="scent-options">
-              <option value="Azzaro Most Wanted"></option><option value="Creed Aventus"></option><option value="Sabhaya"></option><option value="Dior Sauvage"></option><option value="Oudh"></option><option value="9PM"></option><option value="1 Billion"></option><option value="Lattafa"></option><option value="Calvin Klein"></option><option value="Armani"></option><option value="Armani Di Aqua"></option><option value="Hawas Ice"></option><option value="J'adore"></option><option value="Lacoste"></option><option value="CR7"></option>
+              <option value="FS Ombré Leather"></option><option value="FS Savage Noir"></option><option value="FS Imperial Oud"></option><option value="FS Tux Noir"></option><option value="Azzaro Most Wanted"></option><option value="Creed Aventus"></option><option value="Sabhaya"></option><option value="Dior Sauvage"></option><option value="Oudh"></option><option value="9PM"></option><option value="1 Billion"></option><option value="Lattafa"></option><option value="Calvin Klein"></option><option value="Armani"></option><option value="Armani Di Aqua"></option><option value="Hawas Ice"></option><option value="J'adore"></option><option value="Lacoste"></option><option value="CR7"></option><option value="Tom Ford Ombré Leather"></option><option value="Haramain Portfolio Imperial Oud"></option><option value="YSL Tuxedo"></option>
             </datalist>
 
             <label class="field-label" for="order-format">Your preferred size</label>
