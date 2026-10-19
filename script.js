@@ -1,74 +1,50 @@
-const fragrances = [
-  "Azzaro Most Wanted",
-  "Creed Aventus",
-  "Sabhaya",
-  "Dior Sauvage",
-  "Oudh",
-  "9PM",
-  "1 Billion",
-  "Lattafa",
-  "Calvin Klein",
-  "Armani",
-  "Armani Di Aqua",
-  "Hawas Ice",
-  "J'adore",
-  "Lacoste",
-  "CR7",
-];
+const WHATSAPP_NUMBER = "94743739898";
 
 const grid = document.querySelector("#fragrance-grid");
 const searchInput = document.querySelector("#scent-search");
 const resultCount = document.querySelector("#result-count");
+const resultLabel = document.querySelector("#result-label");
 const emptyState = document.querySelector("#empty-state");
 const scentInput = document.querySelector("#order-scent");
 const formatSelect = document.querySelector("#order-format");
-const datalist = document.querySelector("#scent-options");
+const quantityInput = document.querySelector("#order-quantity");
 const formStatus = document.querySelector("#form-status");
 
-function renderFragrances(query = "") {
+function filterFragrances(query = "") {
   const normalizedQuery = query.trim().toLocaleLowerCase();
-  const matches = fragrances.filter((name) => name.toLocaleLowerCase().includes(normalizedQuery));
+  let visibleCount = 0;
 
-  grid.innerHTML = matches
-    .map(
-      (name) => `
-        <article class="fragrance-card">
-          <div class="fragrance-card__top">
-            <span>THE SCENT LIST</span>
-            <span class="fragrance-card__drop" aria-hidden="true"></span>
-          </div>
-          <div>
-            <h3>${name}</h3>
-            <button type="button" data-scent="${name}">Ask about this scent <span aria-hidden="true">↗</span></button>
-          </div>
-        </article>
-      `,
-    )
-    .join("");
+  grid.querySelectorAll("[data-fragrance]").forEach((card) => {
+    const matches = card.dataset.fragrance.toLocaleLowerCase().includes(normalizedQuery);
+    card.hidden = !matches;
+    if (matches) visibleCount += 1;
+  });
 
-  resultCount.textContent = String(matches.length);
-  emptyState.hidden = matches.length !== 0;
+  resultCount.textContent = String(visibleCount);
+  resultLabel.textContent = visibleCount === 1 ? "fragrance to explore" : "fragrances to explore";
+  emptyState.hidden = visibleCount !== 0;
 }
 
-renderFragrances();
+searchInput.addEventListener("input", (event) => filterFragrances(event.currentTarget.value));
 
-datalist.innerHTML = fragrances.map((name) => `<option value="${name}"></option>`).join("");
-searchInput.addEventListener("input", (event) => renderFragrances(event.currentTarget.value));
+function goToOrder({ scent, format, focusTarget } = {}) {
+  if (scent) scentInput.value = scent;
+  if (format) formatSelect.value = format;
+
+  document.querySelector("#order").scrollIntoView({ behavior: "smooth", block: "start" });
+  const control = focusTarget === "scent" ? scentInput : formatSelect;
+  window.setTimeout(() => control.focus({ preventScroll: true }), 450);
+}
 
 grid.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-scent]");
   if (!button) return;
-
-  scentInput.value = button.dataset.scent;
-  document.querySelector("#order").scrollIntoView({ behavior: "smooth" });
-  window.setTimeout(() => formatSelect.focus({ preventScroll: true }), 450);
+  goToOrder({ scent: button.dataset.scent, focusTarget: "format" });
 });
 
 document.querySelectorAll("[data-format]").forEach((button) => {
   button.addEventListener("click", () => {
-    formatSelect.value = button.dataset.format;
-    document.querySelector("#order").scrollIntoView({ behavior: "smooth" });
-    window.setTimeout(() => scentInput.focus({ preventScroll: true }), 450);
+    goToOrder({ format: button.dataset.format, focusTarget: "scent" });
   });
 });
 
@@ -92,23 +68,39 @@ navigation.addEventListener("click", (event) => {
   if (event.target.closest("a")) closeMenu();
 });
 
+document.addEventListener("click", (event) => {
+  if (!navigation.contains(event.target) && !menuToggle.contains(event.target)) closeMenu();
+});
+
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeMenu();
 });
 
 document.querySelector("#order-form").addEventListener("submit", (event) => {
   event.preventDefault();
-  const scent = scentInput.value.trim() || "your fragrances";
+
+  const scent = scentInput.value.trim() || "a fragrance";
   const format = formatSelect.value;
-  const message = `Hi Podi Bottle, I'm interested in ${scent} (${format}). Could you please confirm availability and current price?`;
-  const whatsappUrl = `https://wa.me/9776131010?text=${encodeURIComponent(message)}`;
+  const quantity = Number(quantityInput.value);
+  const messageLines = [
+    `Hi Podi Bottle, I’d like to enquire about ${scent}.`,
+    `Size: ${format}`,
+    `Quantity: ${quantity}`,
+  ];
+
+  if (!['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)) {
+    messageLines.push(`Page: ${window.location.origin}${window.location.pathname}`);
+  }
+
+  messageLines.push("Could you please confirm current availability and price?");
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageLines.join("\n"))}`;
 
   formStatus.replaceChildren();
-  formStatus.append("Opening WhatsApp with your selection. ");
+  formStatus.append("WhatsApp is opening with your enquiry ready. ");
   const fallbackLink = document.createElement("a");
   fallbackLink.href = whatsappUrl;
   fallbackLink.target = "_blank";
-  fallbackLink.rel = "noreferrer";
+  fallbackLink.rel = "noopener noreferrer";
   fallbackLink.textContent = "Continue here if it doesn’t open.";
   formStatus.append(fallbackLink);
 
@@ -116,3 +108,30 @@ document.querySelector("#order-form").addEventListener("submit", (event) => {
 });
 
 document.querySelector("#year").textContent = String(new Date().getFullYear());
+
+const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+let revealObserver;
+
+if ("IntersectionObserver" in window && !motionPreference.matches) {
+  document.documentElement.classList.add("motion-ready");
+  revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.08, rootMargin: "0px 0px 80px 0px" },
+  );
+
+  document.querySelectorAll("[data-reveal]").forEach((element) => revealObserver.observe(element));
+}
+
+motionPreference.addEventListener("change", (event) => {
+  if (!event.matches) return;
+  revealObserver?.disconnect();
+  document.documentElement.classList.remove("motion-ready");
+  document.querySelectorAll("[data-reveal]").forEach((element) => element.classList.add("is-visible"));
+});
