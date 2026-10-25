@@ -1,61 +1,55 @@
-# Podi Bottle
+# Oro Liquido
 
-A static, mobile-first fragrance storefront built with HTML, CSS and browser JavaScript modules. It has no package dependencies, checkout backend or payment integration. Product enquiries open WhatsApp with the selected fragrance, size, quantity and page address; the customer reviews and sends the message in WhatsApp.
+A static fragrance catalogue built with HTML, CSS and browser JavaScript modules. Product pages and the homepage catalogue are generated as crawlable HTML from catalog-data.mjs. Enquiries open WhatsApp with a selected fragrance, size, price, quantity and page URL. There is no cart, checkout backend or payment integration.
 
 ## Run locally
 
-Use a local HTTP server from this directory:
+Serve this directory over HTTP so browser modules load correctly:
 
     python -m http.server 8000
 
-Open http://localhost:8000. The six product pages are pre-generated static HTML files under the products/ directory.
+Open http://localhost:8000.
 
-## Update the product catalogue
+## Catalogue updates
 
 Edit catalog-data.mjs, then run:
 
     node scripts/generate-product-pages.mjs
 
-The script writes six crawlable product pages into products/. Product image variants live in assets/products/; the source photographs remain in assets/. Prices are intentionally null and availability is unconfirmed until the seller supplies accurate details. Do not publish a price or stock claim until it has been verified.
+This refreshes the homepage product cards and the six static pages in products/. Product names, image paths and sizes/prices are defined centrally.
 
 ## Deploy to Vercel
 
-1. Import this repository into Vercel or run vercel from this directory.
-2. Select the Other framework preset. Leave the build command blank and use . as the output directory.
-3. Set the production domain in catalog-data.mjs as SITE_CONFIG.origin (include https://, no trailing slash).
-4. Replace YOUR-PRODUCTION-DOMAIN with the production host in index.html, about-fragrances.html, robots.txt and sitemap.xml.
-5. Run node scripts/generate-product-pages.mjs to update the product pages' canonical, social and structured-data URLs.
-6. Commit and redeploy. Confirm the deployed canonical links and sitemap use the live domain before submitting the sitemap to search engines.
+1. Import this source directory/repository into Vercel, or run vercel from it.
+2. Select the Other framework preset. No build command is needed; use . as the output directory.
+3. Set SITE_CONFIG.origin in catalog-data.mjs to the canonical production origin (for example https://shop.example.com, with no trailing slash).
+4. Replace YOUR-PRODUCTION-DOMAIN with the live host in index.html, about-us.html, about-fragrances.html, robots.txt and sitemap.xml.
+5. Run node scripts/generate-product-pages.mjs so generated product URLs use the production origin, then deploy.
+6. Check the live canonical links and sitemap before submitting the sitemap in Google Search Console.
 
-vercel.json enables clean URLs and removes trailing slashes. The site does not require environment variables or a build step.
+vercel.json enables clean URLs and removes trailing slashes. There are no environment variables or build step.
 
-## Catalogue and business accuracy
+## Business and catalogue accuracy
 
-- The public catalogue contains only the six supplied fragrance listings.
-- Each listing offers a 6 ml decant, 10 ml decant and 50 ml bottle as enquiry options, subject to actual availability.
-- No prices, inventory, reviews, delivery promises, cash-on-delivery availability, refunds, longevity guarantees, or brand authorization are claimed.
-- The product pages include Product structured data without Offer, price, availability, reviews or ratings.
-- The homepage Store structured data uses only the supplied business name, Dehiwala/Colombo location, email and phone. Street address, hours, coordinates and social profiles are omitted.
-- The customer-facing contact is shown as 074 373 9898; telephone and WhatsApp links use +94743739898 (the wa.me URL omits the plus sign).
-- Product labels describe the listings as inspired versions. These independent products are not presented as the original designer products or as officially affiliated.
+- The catalogue contains the six products previously supplied, presented as independent inspired versions; the listings are not the original designer products and Oro Liquido does not claim official brand affiliation.
+- Confirmed size pricing is 5 ml — LKR 950, 10 ml — LKR 1,700, and 50 ml — LKR 7,900.
+- Availability is unconfirmed and should be checked with the seller before ordering.
+- Business-supplied information says fragrances are sourced from Dubai, islandwide delivery is available in Sri Lanka, and the business offers cashback if a perfume does not last more than eight hours. The detailed eligibility, wear assessment and claim process for that guarantee are still needed.
+- The business reports more than 1,000 customers and positive reviews. No review assets or individual testimonials were supplied.
+- Contact: 074 373 9898 via WhatsApp/phone, babageebaba128@gmail.com, Dehiwala, Colombo, Sri Lanka. WhatsApp links use the verified existing international digits 94743739898.
+- Delivery timing/charges, payment options, returns/refunds, guarantee terms, privacy notice and full terms are not documented. The store-information page transparently points this out and is marked noindex.
+- The Dior Savage product photo is labelled “Savage Noir” and identifies an inspired creation of Dior Sauvage. Confirm the customer-facing name if needed.
 
-## Image assets
+## Assets and checks
 
-The six original photographs are retained in assets/: Blue de Chanel.jpeg, Dior Savage.jpeg, Imperial Oudh.jpeg, INSPIRED TOM FORD OMBRE LEATHER.jpg, Louis Vuitton Imagination.jpeg, and TUXEDO SHARP PATCHOULI.jpeg. Optimized square WebP sizes at 480 px and 1200 px are in assets/products/ and are used in the collection and detail pages. assets/og-podi-bottle.jpg is the 1200 × 630 social-sharing cover. Product name and image paths are maintained together in catalog-data.mjs.
+The transparent Oro Liquido wordmark and favicon are derived from the owner-supplied assets/Oro Logo.png; the source image is kept intact. Product photographs and optimized WebP variants remain in assets/ and assets/products/. assets/og-oro-liquido.jpg is the brand social-sharing image.
 
-## Owner details to complete
+Useful project checks:
 
-Before publishing, supply the production domain, verified prices by product and size, current stock, delivery coverage/timing/charges, accepted payment methods (including whether cash on delivery is supported), and any real returns/refund terms. A full privacy notice and store terms should be prepared by the business owner. The store-information.html page transparently points out that these policies have not been supplied; it is marked noindex and excluded from the sitemap until complete.
-
-The Dior Savage listing's supplied photograph is labelled “Savage Noir” and describes an inspired creation of Dior Sauvage. Confirm the customer-facing product name with the seller. assets/logo.jpeg bears Ceylon Drops branding, while the existing Podi Bottle drop mark is used in the site header; confirm which mark should represent the website if the supplied brand logo is intended to replace it.
-
-## Checks
-
-This project has no package manifest, build, lint, unit-test or type-check scripts. Useful source checks include:
-
+    node --check catalog-data.mjs
     node --check script.js
     node --check product-page.js
     node --check scripts/generate-product-pages.mjs
     node scripts/generate-product-pages.mjs
 
-Use a browser at narrow mobile, tablet and desktop widths to review the static pages, product size/quantity selection, navigation, search and WhatsApp draft. The site does not place orders or collect payment.
+The repository is static and has no package manifest, build, lint, unit-test or type-check scripts. Review the homepage and product pages at narrow mobile, tablet and desktop widths. Test search, size/price selection, quantity totals, menu keyboard controls and the generated WhatsApp drafts in a browser.

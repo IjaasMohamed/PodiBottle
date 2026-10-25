@@ -1,4 +1,4 @@
-import { SITE_CONFIG } from "/catalog-data.mjs";
+import { PRODUCTS, SITE_CONFIG, formatLkr } from "/catalog-data.mjs";
 
 const whatsappUrl = (message) => {
   const url = new URL("https://wa.me/" + SITE_CONFIG.whatsappDigits);
@@ -8,7 +8,7 @@ const whatsappUrl = (message) => {
 
 document.querySelectorAll("[data-whatsapp-general]").forEach((link) => {
   link.href = whatsappUrl(
-    "Hi Podi Bottle, I’m interested in your inspired fragrances. Could you share the current options, sizes, prices, availability and ordering information?"
+    "Hi Oro Liquido, I’m interested in your inspired fragrances. Could you share current availability, delivery details, and the terms for the 8-hour cashback guarantee?"
   );
 });
 
@@ -38,6 +38,7 @@ if (header && menuToggle && navigation) {
     menuToggle.setAttribute("aria-expanded", String(open));
     menuToggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
     navigation.inert = !open;
+    if (open) navigation.querySelector("a")?.focus({ preventScroll: true });
   });
   navigation.addEventListener("click", (event) => {
     if (event.target.closest("a")) closeMenu();
@@ -78,30 +79,52 @@ if (search && cards.length) {
 
 const enquiryForm = document.querySelector("[data-home-enquiry]");
 if (enquiryForm) {
+  const sizeSelect = enquiryForm.querySelector('[name="format"]');
+  const quantityInput = enquiryForm.querySelector('[name="quantity"]');
+  const total = enquiryForm.querySelector("[data-order-total]");
+  const currentPrice = () => SITE_CONFIG.pricesLkr[sizeSelect?.value] ?? SITE_CONFIG.pricesLkr["5 ml"];
+  const currentQuantity = () => Math.max(1, Number.parseInt(quantityInput?.value || "1", 10) || 1);
+  const updateTotal = () => {
+    if (total) total.textContent = formatLkr(currentPrice() * currentQuantity());
+  };
+  sizeSelect?.addEventListener("change", updateTotal);
+  quantityInput?.addEventListener("input", updateTotal);
+  updateTotal();
+
   enquiryForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!enquiryForm.reportValidity()) return;
     const formData = new FormData(enquiryForm);
     const scent = String(formData.get("scent") || "").trim();
     const size = String(formData.get("format") || "").trim();
-    const quantity = Math.max(1, Number.parseInt(String(formData.get("quantity") || "1"), 10) || 1);
+    const quantity = currentQuantity();
+    const unitPrice = currentPrice();
+    const productRecord = PRODUCTS.find((item) => item.name === scent);
     const message = [
-      "Hi Podi Bottle, I’d like to enquire about " + scent + ".",
+      "Hi Oro Liquido, I’d like to enquire about " + scent + ".",
       "Size: " + size,
+      "Unit price: " + formatLkr(unitPrice),
       "Quantity: " + quantity,
-      "Could you please confirm the current availability and price?",
-      "Please also share the ordering and delivery information.",
-      "Page: " + window.location.origin + "/"
+      "Estimated total: " + formatLkr(unitPrice * quantity),
+      "Could you please confirm current availability and delivery details?",
+      "Please also share the terms for the 8-hour cashback guarantee.",
+      "Product page: " + window.location.origin + (productRecord ? "/products/" + productRecord.slug : "/#fragrances")
     ].join("\n");
-    const link = whatsappUrl(message);
     const status = document.querySelector("#form-status");
-    if (status) status.textContent = "WhatsApp is opening with your enquiry. Review it there before sending.";
-    window.open(link, "_blank", "noopener,noreferrer");
+    if (status) status.textContent = "WhatsApp is opening with your enquiry. Review the details there before sending.";
+    const destination = whatsappUrl(message);
+    const popup = window.open("about:blank", "_blank");
+    if (popup) {
+      popup.opener = null;
+      popup.location.replace(destination);
+    } else {
+      window.location.assign(destination);
+    }
   });
 }
 
 const floatingWhatsApp = document.querySelector(".whatsapp-float");
-const whatsappCoveredAreas = document.querySelectorAll(".hero__actions, .product-details, .article-aside");
+const whatsappCoveredAreas = document.querySelectorAll(".hero__actions, #fragrances, .product-details, .article-aside, .about-hero__copy, .enquiry-section");
 if (floatingWhatsApp && whatsappCoveredAreas.length && "IntersectionObserver" in window) {
   const visibleAreas = new Set();
   const visibilityObserver = new IntersectionObserver((entries) => {
@@ -118,8 +141,31 @@ if (floatingWhatsApp && whatsappCoveredAreas.length && "IntersectionObserver" in
 }
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const heroArt = document.querySelector("[data-hero-art]");
+if (heroArt && !reducedMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  let frame = 0;
+  heroArt.addEventListener("pointermove", (event) => {
+    if (frame) cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      const bounds = heroArt.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      heroArt.style.setProperty("--tilt-x", `${(-y * 3).toFixed(2)}deg`);
+      heroArt.style.setProperty("--tilt-y", `${(x * 3).toFixed(2)}deg`);
+      heroArt.style.setProperty("--light-x", `${(50 + x * 35).toFixed(1)}%`);
+      heroArt.style.setProperty("--light-y", `${(35 + y * 30).toFixed(1)}%`);
+    });
+  });
+  heroArt.addEventListener("pointerleave", () => {
+    heroArt.style.setProperty("--tilt-x", "0deg");
+    heroArt.style.setProperty("--tilt-y", "0deg");
+    heroArt.style.setProperty("--light-x", "50%");
+    heroArt.style.setProperty("--light-y", "35%");
+  });
+}
+
 if (!reducedMotion && "IntersectionObserver" in window) {
-  const revealTargets = document.querySelectorAll(".format-card, .product-card, .story-image, .story-copy, .enquiry-intro, .order-form");
+  const revealTargets = document.querySelectorAll(".format-card, .product-card, .story-image, .story-copy, .enquiry-intro, .order-form, .proof-item, .about-intro__inner, .benefit-card, .about-disclaimer__inner, .about-cta__inner");
   revealTargets.forEach((element) => element.setAttribute("data-reveal", ""));
   document.documentElement.classList.add("reveal-enabled");
   const observer = new IntersectionObserver((entries, instance) => {
@@ -129,6 +175,6 @@ if (!reducedMotion && "IntersectionObserver" in window) {
         instance.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: "0px 0px -24px 0px" });
+  }, { threshold: 0.08, rootMargin: "0px 0px -18px 0px" });
   revealTargets.forEach((element) => observer.observe(element));
 }
