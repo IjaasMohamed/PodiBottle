@@ -410,6 +410,20 @@ h1 em, h2 em { color: #9b7c47; }
 .product-card__price { margin: 0 0 14px; color: #6c665b; font-size: 12px; }
 .product-card__price strong { color: #29251e; font-size: 14px; }
 .product-card__cta { padding-bottom: 5px; border-color: #b9a77f; color: #45371f; }
+.product-card__size-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 13px 0 12px; }
+.product-card__size-button { min-width: 0; min-height: 36px; padding: 6px 5px; border: 1px solid #cfc5b2; background: #f8f5ee; color: #4c463b; font: inherit; font-size: 11px; cursor: pointer; transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease; }
+.product-card__size-button:hover { border-color: #907447; transform: translateY(-1px); }
+.product-card__size-button.is-selected, .product-card__size-button[aria-pressed="true"] { border-color: #24221d; background: #24221d; color: #fffaf0; }
+.product-card__size-button:focus-visible { outline: 3px solid #947a4d; outline-offset: 3px; }
+.product-card__media img[data-image-portrait="true"] { object-fit: contain; }
+.product-card__media img.is-switching, .product-gallery img.is-switching { opacity: .42; }
+.product-card__price { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.product-card__price > span { color: #62594a; }
+.product-grid .product-card[data-reveal]:nth-child(2) { transition-delay: 55ms; }
+.product-grid .product-card[data-reveal]:nth-child(3) { transition-delay: 110ms; }
+.product-grid .product-card[data-reveal]:nth-child(4) { transition-delay: 165ms; }
+.product-grid .product-card[data-reveal]:nth-child(5) { transition-delay: 220ms; }
+.product-grid .product-card[data-reveal]:nth-child(6) { transition-delay: 275ms; }
 .catalog-note { color: #706a5f; line-height: 1.75; }
 .proof-section { background: #f8f5ee; }
 .proof-section .section-heading { margin-bottom: 46px; }
@@ -598,4 +612,10 @@ h1 em, h2 em { color: #9b7c47; }
   .hero-art__frame { transform: none !important; }
   .hero--cinematic .hero__copy, .hero-art, .about-hero__copy, .about-hero__image { animation: none !important; opacity: 1; }
   .reveal-enabled [data-reveal] { opacity: 1; transform: none; }
+  .product-grid .product-card[data-reveal] { transition-delay: 0s !important; }
+  .product-card__size-button, .product-card__media img, .product-gallery img { transition-duration: .01ms !important; }
 }
+
+.product-gallery[data-product-size="5 ml"], .product-gallery[data-product-size="10 ml"] { display: flex; flex-direction: column; align-items: center; }
+.product-gallery[data-product-size="5 ml"] img, .product-gallery[data-product-size="10 ml"] img { width: auto; max-width: 100%; height: auto; max-height: min(78vh, 860px); aspect-ratio: auto; object-fit: contain; }
+.product-gallery[data-product-size="5 ml"] .product-gallery__caption, .product-gallery[data-product-size="10 ml"] .product-gallery__caption { align-self: stretch; }

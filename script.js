@@ -77,6 +77,41 @@ if (search && cards.length) {
   search.addEventListener("input", filterCards);
 }
 
+cards.forEach((card) => {
+  const image = card.querySelector("[data-card-image]");
+  const price = card.querySelector("[data-card-price]");
+  const sizeLabel = card.querySelector("[data-card-size-label]");
+  const ctaLabel = card.querySelector("[data-card-cta]");
+  const links = Array.from(card.querySelectorAll("[data-product-link]"));
+  card.querySelectorAll("[data-card-variant]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const size = button.dataset.size;
+      if (!size || !image) return;
+      card.querySelectorAll("[data-card-variant]").forEach((option) => {
+        const selected = option === button;
+        option.setAttribute("aria-pressed", String(selected));
+        option.classList.toggle("is-selected", selected);
+      });
+      const sourceWidth = size === "50 ml" ? 1200 : 960;
+      image.classList.add("is-switching");
+      image.srcset = `${button.dataset.imageSmall} 480w, ${button.dataset.image} ${sourceWidth}w`;
+      image.sizes = "(max-width: 560px) 88vw, (max-width: 900px) 44vw, 30vw";
+      image.src = button.dataset.imageSmall;
+      image.alt = button.dataset.imageAlt || "Fragrance product image";
+      image.width = Number(button.dataset.imageWidth) || 480;
+      image.height = Number(button.dataset.imageHeight) || 480;
+      image.dataset.imagePortrait = button.dataset.imagePortrait || "false";
+      if (price) price.textContent = formatLkr(Number(button.dataset.price) || 0);
+      if (sizeLabel) sizeLabel.textContent = button.dataset.sizeLabel || size;
+      if (ctaLabel) ctaLabel.textContent = `Explore ${button.dataset.sizeLabel || size}`;
+      const url = `${card.dataset.productUrl}?size=${encodeURIComponent(size.toLocaleLowerCase().replace(/\s/g, "-"))}`;
+      links.forEach((link) => { link.href = url; });
+      if (typeof image.decode === "function") image.decode().then(() => image.classList.remove("is-switching")).catch(() => image.classList.remove("is-switching"));
+      else image.onload = () => image.classList.remove("is-switching");
+    });
+  });
+});
+
 const enquiryForm = document.querySelector("[data-home-enquiry]");
 if (enquiryForm) {
   const sizeSelect = enquiryForm.querySelector('[name="format"]');
@@ -97,12 +132,13 @@ if (enquiryForm) {
     const formData = new FormData(enquiryForm);
     const scent = String(formData.get("scent") || "").trim();
     const size = String(formData.get("format") || "").trim();
+    const sizeDescription = size === "50 ml" ? "50 ml bottle" : `${size} decant`;
     const quantity = currentQuantity();
     const unitPrice = currentPrice();
     const productRecord = PRODUCTS.find((item) => item.name === scent);
     const message = [
       "Hi Oro Liquido, I’d like to enquire about " + scent + ".",
-      "Size: " + size,
+      "Size: " + sizeDescription,
       "Unit price: " + formatLkr(unitPrice),
       "Quantity: " + quantity,
       "Estimated total: " + formatLkr(unitPrice * quantity),
@@ -124,7 +160,7 @@ if (enquiryForm) {
 }
 
 const floatingWhatsApp = document.querySelector(".whatsapp-float");
-const whatsappCoveredAreas = document.querySelectorAll(".hero__actions, #fragrances, .product-details, .article-aside, .about-hero__copy, .enquiry-section");
+const whatsappCoveredAreas = document.querySelectorAll(".hero__actions, #fragrances, .product-gallery, .product-details, .article-aside, .about-hero__copy, .enquiry-section");
 if (floatingWhatsApp && whatsappCoveredAreas.length && "IntersectionObserver" in window) {
   const visibleAreas = new Set();
   const visibilityObserver = new IntersectionObserver((entries) => {

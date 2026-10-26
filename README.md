@@ -16,7 +16,7 @@ Edit catalog-data.mjs, then run:
 
     node scripts/generate-product-pages.mjs
 
-This refreshes the homepage product cards and the six static pages in products/. Product names, image paths and sizes/prices are defined centrally.
+This refreshes the homepage product cards and the six static pages in products/. Product names, image paths and sizes/prices are defined centrally. Each product's `imagesBySize` maps the 5 ml and 10 ml decant photos and the 50 ml bottle photo; the catalogue selectors and product pages use that mapping to keep the displayed image, price and enquiry size in sync. The supplied original photos remain in `assets/`; optimized WebP variants are in `assets/products/`.
 
 ## Deploy to Vercel
 

@@ -7,22 +7,31 @@ const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => (
 const abs = (path) => SITE_CONFIG.origin + path;
 
 function makeProductCard(product, index) {
-  const url = productUrl(product) + ".html";
-  const query = [product.name, product.inspiration || "", "inspired fragrance"].join(" ").toLocaleLowerCase();
+  const defaultSize = "5 ml";
+  const defaultImage = product.imagesBySize[defaultSize];
+  const url = (size) => `${productUrl(product)}.html?size=${size.toLocaleLowerCase().replace(/\s/g, "-")}`;
+  const query = [product.name, product.inspiration || "", "inspired fragrance decant 5 ml 5ml 10 ml 10ml 50 ml 50ml"].join(" ").toLocaleLowerCase();
+  const sizeButtons = SITE_CONFIG.sizes.map((size) => {
+    const image = product.imagesBySize[size];
+    const isBottle = size === "50 ml";
+    const label = isBottle ? "50 ml bottle" : `${size} decant`;
+    return `<button class="product-card__size-button" type="button" data-card-variant data-size="${escapeHtml(size)}" data-image="${image.image}" data-image-small="${image.imageSmall}" data-image-alt="${escapeHtml(image.alt)}" data-image-width="${image.width}" data-image-height="${image.height}" data-image-portrait="${String(!isBottle)}" data-price="${SITE_CONFIG.pricesLkr[size]}" data-size-label="${escapeHtml(label)}" aria-label="Show ${escapeHtml(label)} for ${escapeHtml(product.name)}" aria-pressed="${String(size === defaultSize)}">${escapeHtml(size)}</button>`;
+  }).join("");
   return `
-            <article class="product-card" data-product-card data-search="${escapeHtml(query)}">
-              <a class="product-card__media" href="${url}" aria-label="View ${escapeHtml(product.name)} inspired fragrance">
-                <img src="${product.imageSmall}" srcset="${product.imageSmall} 480w, ${product.image} 1200w" sizes="(max-width: 560px) 88vw, (max-width: 900px) 44vw, 30vw" alt="${escapeHtml(product.alt)}" width="480" height="480" loading="lazy" decoding="async" />
+            <article class="product-card" data-product-card data-product-url="${productUrl(product)}.html" data-search="${escapeHtml(query)}">
+              <a class="product-card__media" data-product-link href="${url(defaultSize)}" aria-label="View ${escapeHtml(product.name)} inspired fragrance">
+                <img data-card-image data-image-portrait="true" src="${defaultImage.imageSmall}" srcset="${defaultImage.imageSmall} 480w, ${defaultImage.image} 960w" sizes="(max-width: 560px) 88vw, (max-width: 900px) 44vw, 30vw" alt="${escapeHtml(defaultImage.alt)}" width="${defaultImage.width}" height="${defaultImage.height}" loading="lazy" decoding="async" />
                 <span class="product-card__index">${String(index + 1).padStart(2, "0")}</span>
                 <span class="product-card__view">Discover fragrance <span aria-hidden="true">↗</span></span>
               </a>
               <div class="product-card__body">
                 <p class="product-card__label">Independent inspired version</p>
-                <h3><a href="${url}">${escapeHtml(product.name)}</a></h3>
+                <h3><a data-product-link href="${url(defaultSize)}">${escapeHtml(product.name)}</a></h3>
                 <p class="product-card__inspiration">${product.inspiration ? "Inspired by " + escapeHtml(product.inspiration) : "A fragrance from the current edit"}</p>
-                <p class="product-card__sizes">5 ml · 10 ml · 50 ml <span>Choose a size on the product page</span></p>
-                <p class="product-card__price">From <strong>${formatLkr(SITE_CONFIG.pricesLkr["5 ml"])}</strong></p>
-                <a class="product-card__cta" href="${url}">Explore sizes <span aria-hidden="true">↗</span></a>
+                <p class="product-card__sizes">5 ml &amp; 10 ml decants · 50 ml bottle</p>
+                <div class="product-card__size-options" role="group" aria-label="Choose a size for ${escapeHtml(product.name)}">${sizeButtons}</div>
+                <p class="product-card__price"><span data-card-size-label>5 ml decant</span><strong data-card-price>${formatLkr(SITE_CONFIG.pricesLkr[defaultSize])}</strong></p>
+                <a class="product-card__cta" data-product-link href="${url(defaultSize)}"><span data-card-cta>Explore 5 ml decant</span><span aria-hidden="true">↗</span></a>
               </div>
             </article>`;
 }
@@ -30,7 +39,7 @@ function makeProductCard(product, index) {
 function makePage(product, index) {
   const canonical = abs(productUrl(product));
   const title = `${product.name} inspired fragrance | Oro Liquido`;
-  const description = `${product.titleDescription} Explore 5 ml, 10 ml and 50 ml sizes from Oro Liquido in Dehiwala, Colombo.`;
+  const description = `${product.titleDescription} Explore 5 ml and 10 ml decants plus a 50 ml bottle from Oro Liquido in Dehiwala, Colombo.`;
   const offers = SITE_CONFIG.sizes.map((size) => ({
     "@type": "Offer",
     "name": size,
@@ -46,7 +55,7 @@ function makePage(product, index) {
         "@id": canonical + "#product",
         "name": product.name,
         "description": product.titleDescription,
-        "image": abs(product.image),
+        "image": SITE_CONFIG.sizes.map((size) => abs(product.imagesBySize[size].image)),
         "url": canonical,
         "category": "Inspired fragrance",
         "offers": offers
@@ -62,11 +71,14 @@ function makePage(product, index) {
     ]
   };
   const related = PRODUCTS.filter((item) => item.slug !== product.slug).slice(0, 3).map((item) =>
-    `<a class="related-card" href="${productUrl(item)}.html"><img src="${item.imageSmall}" alt="${escapeHtml(item.alt)}" width="480" height="480" loading="lazy" decoding="async" /><span>${escapeHtml(item.name)}</span><small>From ${formatLkr(SITE_CONFIG.pricesLkr["5 ml"])}</small></a>`
+    `<a class="related-card" href="${productUrl(item)}.html?size=50-ml"><img src="${item.imageSmall}" alt="${escapeHtml(item.alt)}" width="480" height="480" loading="lazy" decoding="async" /><span>${escapeHtml(item.name)}</span><small>50 ml · ${formatLkr(SITE_CONFIG.pricesLkr["50 ml"])}</small></a>`
   ).join("\n");
-  const options = SITE_CONFIG.sizes.map((size, sizeIndex) => {
+  const defaultSize = "5 ml";
+  const defaultImage = product.imagesBySize[defaultSize];
+  const options = SITE_CONFIG.sizes.map((size) => {
     const sizeId = "size-" + size.toLocaleLowerCase().replace(/\s+/g, "-");
-    return `<div class="size-option"><input id="${sizeId}" type="radio" name="product-size" value="${escapeHtml(size)}"${sizeIndex === 0 ? " checked" : ""} /><label for="${sizeId}"><span>${escapeHtml(size)}</span><small>${formatLkr(SITE_CONFIG.pricesLkr[size])}</small></label></div>`;
+    const formatLabel = size === "50 ml" ? "Bottle" : "Decant";
+    return `<div class="size-option"><input id="${sizeId}" type="radio" name="product-size" value="${escapeHtml(size)}"${size === defaultSize ? " checked" : ""} /><label for="${sizeId}"><span>${escapeHtml(size)} <small>${formatLabel}</small></span><small>${formatLkr(SITE_CONFIG.pricesLkr[size])}</small></label></div>`;
   }).join("\n");
   const imageNotice = product.imageNote
     ? `<p class="product-disclaimer">${escapeHtml(product.imageNote)}</p>`
@@ -88,15 +100,15 @@ function makePage(product, index) {
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:url" content="${escapeHtml(canonical)}" />
-  <meta property="og:image" content="${escapeHtml(abs(product.image))}" />
-  <meta property="og:image:alt" content="${escapeHtml(product.alt)}" />
+  <meta property="og:image" content="${escapeHtml(abs(defaultImage.image))}" />
+  <meta property="og:image:alt" content="${escapeHtml(defaultImage.alt)}" />
   <meta property="og:locale" content="en_LK" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${escapeHtml(title)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
-  <meta name="twitter:image" content="${escapeHtml(abs(product.image))}" />
+  <meta name="twitter:image" content="${escapeHtml(abs(defaultImage.image))}" />
   <link rel="icon" type="image/png" href="${SITE_CONFIG.favicon}" />
-  <link rel="preload" as="image" href="${product.image}" fetchpriority="high" />
+  <link rel="preload" as="image" imagesrcset="${defaultImage.imageSmall} 480w, ${defaultImage.image} 960w" imagesizes="(max-width: 760px) 92vw, 54vw" fetchpriority="high" />
   <link rel="stylesheet" href="/styles.css" />
   <script type="application/ld+json">${jsonLd}</script>
   <script type="module" src="/script.js"></script>
@@ -113,7 +125,7 @@ function makePage(product, index) {
   <main id="main" class="product-page-main">
     <nav class="breadcrumbs section-wrap product-crumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="breadcrumbs__separator" aria-hidden="true">/</span><a href="/#fragrances">Fragrances</a><span class="breadcrumbs__separator" aria-hidden="true">/</span><span aria-current="page">${escapeHtml(product.name)}</span></nav>
     <div class="section-wrap product-layout">
-      <figure class="product-gallery"><img src="${product.image}" srcset="${product.imageSmall} 480w, ${product.image} 1200w" sizes="(max-width: 760px) 92vw, 54vw" alt="${escapeHtml(product.alt)}" width="1200" height="1200" fetchpriority="high" /><figcaption class="product-gallery__caption">Product photograph supplied for this inspired-version listing.</figcaption></figure>
+      <figure class="product-gallery" data-product-gallery data-product-size="${defaultSize}"><img data-product-image data-image-portrait="true" src="${defaultImage.imageSmall}" srcset="${defaultImage.imageSmall} 480w, ${defaultImage.image} 960w" sizes="(max-width: 760px) 92vw, 54vw" alt="${escapeHtml(defaultImage.alt)}" width="${defaultImage.width}" height="${defaultImage.height}" fetchpriority="high" decoding="async" /><figcaption class="product-gallery__caption" data-gallery-caption>5 ml decant · Product photograph for the selected size.</figcaption></figure>
       <section class="product-details" aria-labelledby="product-title">
         <p class="eyebrow"><span class="eyebrow__line"></span> Independent inspired fragrance</p>
         <span class="product-flag">Inspired version</span>
@@ -126,7 +138,7 @@ function makePage(product, index) {
         <p class="order-total order-total--detail" aria-live="polite">Estimated total <strong data-product-total>${formatLkr(SITE_CONFIG.pricesLkr[SITE_CONFIG.sizes[0]])}</strong></p>
         <a class="button button--dark product-buy" href="https://wa.me/${SITE_CONFIG.whatsappDigits}" target="_blank" rel="noopener noreferrer" data-product-whatsapp>Enquire on WhatsApp <span aria-hidden="true">↗</span></a>
         <p class="product-detail-note">Your enquiry opens in WhatsApp with the selected size, price and quantity. Review and send it there; no order is placed on this website.</p>
-        <div class="product-description"><h2>About this listing</h2><p>This product is an independently presented inspired fragrance, not the original designer product. Brand names identify the listed inspiration only; Oro Liquido does not claim authorization or affiliation. The business states islandwide delivery and an 8-hour cashback guarantee; confirm delivery charges, timing, and guarantee eligibility and claim conditions before ordering.</p></div>
+        <div class="product-description"><h2>About this listing</h2><p>This product is an independently presented inspired fragrance, not the original designer product. The 5 ml and 10 ml formats are decants; the 50 ml format is shown as a bottle. Brand names identify the listed inspiration only; Oro Liquido does not claim authorization or affiliation. The business states islandwide delivery and an 8-hour cashback guarantee; confirm delivery charges, timing, and guarantee eligibility and claim conditions before ordering.</p></div>
       </section>
     </div>
     <section class="section-wrap related-section" aria-labelledby="related-title"><h2 id="related-title">Continue your discovery</h2><div class="related-grid">${related}</div></section>
